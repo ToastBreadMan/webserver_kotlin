@@ -11,21 +11,23 @@ class Helper {
             for (line in lines){
                 val lineWords = line.split(lineDelim)
                 for (word in lineWords){
-                    words.add(word.replace(" ",""))
+                    //println(word)
+                    words.add(word)
                 }
                 //words.add(blockDelim) //TODO:HANDLE WITH CARE
             }
             return words
         }
 
-        fun processRest(splitedRequest: MutableList<String>):HashMap<String,String>{
+        fun processRest(request: String):HashMap<String,String>{
             val keyValDelim = ":"
             val restRequest: HashMap<String, String> = HashMap()
-            for ((i, value) in splitedRequest.iterator().withIndex()){
-                if (value.isEmpty()) break
-                if (keyValDelim in value) {
-                    val splitted = splitedRequest[i].split(keyValDelim)
-                    restRequest[splitted[0]] = splitted[1]
+            val lines = request.split("\n")
+            for (line in lines){
+                if (keyValDelim in line) {
+                    val keyVal = line.split(keyValDelim)
+                    //println(keyVal[0])
+                    restRequest.put(keyVal[0], keyVal[1])
                 }
             }
             return restRequest
@@ -38,7 +40,7 @@ class Helper {
                 if (add) {
                     content = content.plus(value)
                 }
-                if (value.isEmpty()) {
+                if (value.isBlank()) {
                     add = true
                 }
             }

@@ -27,18 +27,21 @@ class Webserver(val port: Int) {
     }
 
     fun add(method:String, path: String, function: (Request)->Response) {
-        if (routes[method]?.get(path) == null)
-            routes[method]?.set(path, function)
+        //if (routes[method]?.get(path) == null)
+        if (routes[method] == null) {
+            routes.put(method, HashMap())
+        }
+        routes[method]?.put(path, function)
     }
 
     private fun handleClient(client: Socket){
-        PrintWriter(client.getOutputStream(), true).println("Hello")
-        val read = BufferedReader(InputStreamReader(client.getInputStream())).readLine()
-        println("------BEGIN-------")
-        println(read)
-        println("-------END--------")
-        Handler(routes).handleRequest(read)
-        PrintWriter(client.getOutputStream(), true).print("Hello")
+        //val read = BufferedReader(InputStreamReader(client.getInputStream())).readLine()
+        var read:String = ""
+        while (client.getInputStream().available()>0) {
+            read += client.getInputStream().read().toChar()
+        }
+        val response = Handler(routes).handleRequest(read)
+        PrintWriter(client.getOutputStream(), true).println(response) // has to be println
         client.close()
         }
     }

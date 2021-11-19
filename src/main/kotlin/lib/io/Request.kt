@@ -1,8 +1,3 @@
 package lib.io
 
-class Request {
-    lateinit var header:HashMap<String, String>
-    lateinit var content:String
-    lateinit var method: String
-    lateinit var protocol:String
-}
+class Request(val header:HashMap<String, String>, val content:String, val method: String,val protocol:String)
